@@ -10,25 +10,79 @@ For more information, visit the
 
 ## Installation
 
-1. Add `firebase_admin_ex` to your list of dependencies in `mix.exs`:
+* Add `firebase_admin_ex` to your list of dependencies in `mix.exs`:
 
-  ```elixir
-  def deps do
-    [{:firebase_admin_ex, "~> 0.1.0"}]
+```ex
+defmodule YourApplication.Mixfile do
+  use Mix.Project
+
+  # Run "mix help deps" to learn about dependencies.
+  defp deps do
+    [
+      {:firebase_admin_ex, "~> 0.1.0"},
+      {:goth, "~> 0.8.0"}
+    ]
   end
-  ```
+end
+```
 
-2. Ensure `firebase_admin_ex` is started before your application:
+> Note the [goth][goth] package, which handles Google Authentication, is also
+> required.
 
-  ```elixir
-  def application do
-    [applications: [:firebase_admin_ex]]
-  end
-  ```
+Next, run `mix deps.get` to pull down the dependencies:
 
-## Configuration
+```sh
+$ mix deps.get
+```
 
-## Usage
+Now you can make an API call by obtaining an access token and using the
+generated modules.
+
+### Obtaining an Access Token
+Authentication is typically done through [Application Default Credentials][adc]
+which means you do not have to change the code to authenticate as long as
+your environment has credentials.
+
+Start by creating a [Service Account key file][service_account_key_file].
+This file can be used to authenticate to Google Cloud Platform services from any environment.
+To use the file, set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to
+the path to the key file.
+For example:
+
+```sh
+$ export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json
+```
+
+If you are deploying to App Engine, Compute Engine, or Container Engine, your
+credentials will be available by default.
+
+### Usage
+
+```ex
+# Obtain an access token using goth
+firebase_messaging_scope = "https://www.googleapis.com/auth/firebase.messaging"
+{:ok, token} = Goth.Token.for_scope(firebase_messaging_scope)
+oauth_token = token.token
+
+# Get your device registration token
+registration_token = "c9dWDKIbmB0:APA91bEqhZFLXLMn_r5qAbnExzWbnhXWhKpbRpQeCxvSCJiIpgc9pfUTHKnTjxy6FC20ELwzWsJlcqu98oxhk1UC7m32A4iOx_BsYNWUviI0-iDTVrffj0BvVo79P7HwARW4yqQFxEOT"
+
+# Define message payload attributes
+message = FirebaseAdminEx.Messaging.Message.new(
+  data: %{},
+  token: registration_token,
+  webpush: FirebaseAdminEx.Messaging.WebMessageConfig.new(
+    headers: %{},
+    data: %{},
+    title: "notification title",
+    body:  "notification body",
+    icon:  "https://icon.png"
+  )
+)
+
+# Call the Firebase messaging V1 send API
+{:ok, response} = FirebaseAdminEx.Messaging.send(oauth_token, message)
+```
 
 ## Firebase Documentation
 
@@ -40,3 +94,12 @@ For more information, visit the
 
 Your use of Firebase is governed by the
 [Terms of Service for Firebase Services](https://firebase.google.com/terms/).
+
+## Disclaimer
+
+This is not an officially supported Google product.
+
+[adc]: https://cloud.google.com/docs/authentication#getting_credentials_for_server-centric_flow
+[service_account_key_file]: https://developers.google.com/identity/protocols/OAuth2ServiceAccount#creatinganaccount
+[hex_pm]: https://hex.pm/users/google-cloud
+[goth]: https://hex.pm/packages/goth
