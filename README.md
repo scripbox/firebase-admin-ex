@@ -71,7 +71,7 @@ registration_token = "c9dWDKIbmB0:APA91bEqhZFLXLMn_r5qAbnExzWbnhXWhKpbRpQeCxvSCJ
 message = FirebaseAdminEx.Messaging.Message.new(
   data: %{},
   token: registration_token,
-  webpush: FirebaseAdminEx.Messaging.WebMessageConfig.new(
+  webpush: FirebaseAdminEx.Messaging.WebMessage.Config.new(
     headers: %{},
     data: %{},
     title: "notification title",

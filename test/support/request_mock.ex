@@ -7,7 +7,8 @@ defmodule FirebaseAdminEx.RequestMock do
   # Private API
   defp successful_response do
     %HTTPoison.Response{
-      body: "{\n  \"name\": \"projects/YOUR-FIREBASE-PROJECT-ID/messages/0:1523208634968690%cc9b4facf9fd7ecd\"\n}\n",
+      body:
+        "{\n  \"name\": \"projects/YOUR-FIREBASE-PROJECT-ID/messages/0:1523208634968690%cc9b4facf9fd7ecd\"\n}\n",
       headers: [
         {"Content-Type", "application/json; charset=UTF-8"},
         {"Vary", "X-Origin"},
@@ -19,7 +20,7 @@ defmodule FirebaseAdminEx.RequestMock do
         {"X-Frame-Options", "SAMEORIGIN"},
         {"X-Content-Type-Options", "nosniff"},
         {"Alt-Svc",
-        "hq=\":443\"; ma=2592000; quic=51303432; quic=51303431; quic=51303339; quic=51303335,quic=\":443\"; ma=2592000; v=\"42,41,39,35\""},
+         "hq=\":443\"; ma=2592000; quic=51303432; quic=51303431; quic=51303339; quic=51303335,quic=\":443\"; ma=2592000; v=\"42,41,39,35\""},
         {"Accept-Ranges", "none"},
         {"Vary", "Origin,Accept-Encoding"},
         {"Transfer-Encoding", "chunked"}

@@ -14,7 +14,8 @@ defmodule FirebaseAdminEx.Messaging do
   @spec send(String.t(), struct()) :: tuple()
   def send(oauth_token, %Message{} = message) do
     with {:ok, message} <- Message.validate(message),
-         {:ok, response} <- Request.post(send_url(), %{message: message}, auth_header(oauth_token)),
+         {:ok, response} <-
+           Request.post(send_url(), %{message: message}, auth_header(oauth_token)),
          {:ok, body} <- Response.parse(response) do
       {:ok, body}
     else
