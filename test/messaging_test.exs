@@ -94,5 +94,22 @@ defmodule FirebaseAdminEx.MessagingTest do
         {:ok, _response} = Messaging.send(oauth_token, message)
       end
     end
+
+    test "[DATA] returns response with valid message and oauth_token" do
+      with_request_mock do
+        oauth_token = "oauth token"
+
+        message =
+          Message.new(
+            data: %{
+              key_1: "value 1",
+              key_2: "value 2"
+            },
+            token: "registration-token",
+          )
+
+        {:ok, _response} = Messaging.send(oauth_token, message)
+      end
+    end
   end
 end
