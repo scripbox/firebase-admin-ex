@@ -20,10 +20,10 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Payload do
 
   # Public API
 
-  def new(attributes \\ []) do
+  def new(attributes \\ %{}) do
     %__MODULE__{
-      aps: Keyword.get(attributes, :aps),
-      custom_data: Keyword.get(attributes, :custom_data)
+      aps: Aps.new(Map.get(attributes, :aps)),
+      custom_data: Map.get(attributes, :custom_data)
     }
   end
 

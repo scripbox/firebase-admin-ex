@@ -36,19 +36,19 @@ defmodule FirebaseAdminEx.Messaging.AndroidMessage.Notification do
 
   # Public API
 
-  def new(attributes \\ []) do
+  def new(attributes \\ %{}) do
     %__MODULE__{
-      title: Keyword.get(attributes, :title),
-      body: Keyword.get(attributes, :body),
-      icon: Keyword.get(attributes, :icon),
-      color: Keyword.get(attributes, :color),
-      sound: Keyword.get(attributes, :sound),
-      tag: Keyword.get(attributes, :tag),
-      click_action: Keyword.get(attributes, :click_action),
-      body_loc_key: Keyword.get(attributes, :body_loc_key),
-      body_loc_args: Keyword.get(attributes, :body_loc_args),
-      title_loc_key: Keyword.get(attributes, :title_loc_key),
-      title_loc_args: Keyword.get(attributes, :title_loc_args)
+      title: Map.get(attributes, :title),
+      body: Map.get(attributes, :body),
+      icon: Map.get(attributes, :icon),
+      color: Map.get(attributes, :color),
+      sound: Map.get(attributes, :sound),
+      tag: Map.get(attributes, :tag),
+      click_action: Map.get(attributes, :click_action),
+      body_loc_key: Map.get(attributes, :body_loc_key),
+      body_loc_args: Map.get(attributes, :body_loc_args),
+      title_loc_key: Map.get(attributes, :title_loc_key),
+      title_loc_args: Map.get(attributes, :title_loc_args)
     }
   end
 

@@ -6,7 +6,6 @@ defmodule FirebaseAdminEx.MessagingTest do
   alias FirebaseAdminEx.Messaging
   alias FirebaseAdminEx.RequestMock
   alias FirebaseAdminEx.Messaging.Message
-  alias FirebaseAdminEx.Messaging.APNSMessage
   alias FirebaseAdminEx.Messaging.WebMessage.Config, as: WebMessageConfig
   alias FirebaseAdminEx.Messaging.AndroidMessage.Config, as: AndroidMessageConfig
   alias FirebaseAdminEx.Messaging.APNSMessage.Config, as: APNSMessageConfig
@@ -26,18 +25,18 @@ defmodule FirebaseAdminEx.MessagingTest do
         oauth_token = "oauth token"
 
         message =
-          Message.new(
+          Message.new(%{
             data: %{},
             token: "registration-token",
             webpush:
-              WebMessageConfig.new(
+              WebMessageConfig.new(%{
                 headers: %{},
                 data: %{},
                 title: "notification title",
                 body: "notification body",
                 icon: "https://icon.png"
-              )
-          )
+              })
+          })
 
         {:ok, _response} = Messaging.send(oauth_token, message)
       end
@@ -48,18 +47,18 @@ defmodule FirebaseAdminEx.MessagingTest do
         oauth_token = "oauth token"
 
         message =
-          Message.new(
+          Message.new(%{
             data: %{},
             token: "registration-token",
             android:
-              AndroidMessageConfig.new(
+              AndroidMessageConfig.new(%{
                 headers: %{},
                 data: %{},
                 title: "notification title",
                 body: "notification body",
                 icon: "https://icon.png"
-              )
-          )
+              })
+          })
 
         {:ok, _response} = Messaging.send(oauth_token, message)
       end
@@ -70,26 +69,25 @@ defmodule FirebaseAdminEx.MessagingTest do
         oauth_token = "oauth token"
 
         message =
-          Message.new(
+          Message.new(%{
             data: %{},
             token: "registration-token",
             apns:
-              APNSMessageConfig.new(
+              APNSMessageConfig.new(%{
                 headers: %{},
                 payload: %{
-                  aps:
-                    APNSMessage.Aps.new(
-                      alert:
-                        APNSMessage.Alert.new(
-                          title: "Message Title",
-                          body: "Message Body"
-                        ),
-                      badge: 5
-                    ),
+                  aps: %{
+                    alert: %{
+                      title: "Message Title",
+                      body: "Message Body"
+                    },
+                    sound: "default",
+                    "content-available": 1
+                  },
                   custom_data: %{}
                 }
-              )
-          )
+              })
+          })
 
         {:ok, _response} = Messaging.send(oauth_token, message)
       end
@@ -100,13 +98,13 @@ defmodule FirebaseAdminEx.MessagingTest do
         oauth_token = "oauth token"
 
         message =
-          Message.new(
+          Message.new(%{
             data: %{
               key_1: "value 1",
               key_2: "value 2"
             },
-            token: "registration-token",
-          )
+            token: "registration-token"
+          })
 
         {:ok, _response} = Messaging.send(oauth_token, message)
       end

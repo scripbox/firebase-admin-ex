@@ -22,10 +22,10 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Config do
   defstruct @keys
 
   # Public API
-  def new(attributes \\ []) do
+  def new(attributes \\ %{}) do
     %__MODULE__{
-      headers: Keyword.get(attributes, :headers, %{}),
-      payload: Payload.new(attributes)
+      headers: Map.get(attributes, :headers, %{}),
+      payload: Payload.new(Map.get(attributes, :payload))
     }
   end
 

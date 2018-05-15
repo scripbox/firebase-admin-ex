@@ -20,11 +20,11 @@ defmodule FirebaseAdminEx.Messaging.WebMessage.Notification do
 
   # Public API
 
-  def new(attributes \\ []) do
+  def new(attributes \\ %{}) do
     %__MODULE__{
-      title: Keyword.get(attributes, :title),
-      body: Keyword.get(attributes, :body),
-      icon: Keyword.get(attributes, :icon)
+      title: Map.get(attributes, :title),
+      body: Map.get(attributes, :body),
+      icon: Map.get(attributes, :icon)
     }
   end
 

@@ -12,9 +12,9 @@ defmodule FirebaseAdminEx.Messaging.Message do
   @keys [
     data: %{},
     notification: %{},
-    webpush: %WebMessageConfig{},
-    android: %AndroidMessageConfig{},
-    apns: %APNSMessageConfig{},
+    webpush: nil,
+    android: nil,
+    apns: nil,
     token: ""
   ]
 
@@ -30,37 +30,37 @@ defmodule FirebaseAdminEx.Messaging.Message do
   defstruct @keys
 
   # Public API
-  def new([data: data, token: token, webpush: webpush] = attributes) do
+  def new(%{token: token, webpush: webpush} = attributes) do
     %Message{
-      data: data || %{},
-      notification: Keyword.get(attributes, :notification, %{}),
+      data: Map.get(attributes, :data, %{}),
+      notification: Map.get(attributes, :notification, %{}),
       webpush: webpush,
       token: token
     }
   end
 
-  def new([data: data, token: token, android: android] = attributes) do
+  def new(%{token: token, android: android} = attributes) do
     %Message{
-      data: data || %{},
-      notification: Keyword.get(attributes, :notification, %{}),
+      data: Map.get(attributes, :data, %{}),
+      notification: Map.get(attributes, :notification, %{}),
       android: android,
       token: token
     }
   end
 
-  def new([data: data, token: token, apns: apns] = attributes) do
+  def new(%{token: token, apns: apns} = attributes) do
     %Message{
-      data: data || %{},
-      notification: Keyword.get(attributes, :notification, %{}),
+      data: Map.get(attributes, :data, %{}),
+      notification: Map.get(attributes, :notification, %{}),
       apns: apns,
       token: token
     }
   end
 
-  def new([data: data, token: token] = attributes) do
+  def new(%{token: token} = attributes) do
     %Message{
-      data: data || %{},
-      notification: Keyword.get(attributes, :notification, %{}),
+      data: Map.get(attributes, :data, %{}),
+      notification: Map.get(attributes, :notification, %{}),
       token: token
     }
   end
@@ -70,7 +70,8 @@ defmodule FirebaseAdminEx.Messaging.Message do
   def validate(%Message{data: _, token: _, webpush: nil, android: nil, apns: nil} = message),
     do: {:ok, message}
 
-  def validate(%Message{data: _, token: _, webpush: web_message_config} = message) do
+  def validate(%Message{data: _, token: _, webpush: web_message_config} = message)
+      when web_message_config != nil do
     case WebMessageConfig.validate(web_message_config) do
       {:ok, _} ->
         {:ok, message}
@@ -80,7 +81,8 @@ defmodule FirebaseAdminEx.Messaging.Message do
     end
   end
 
-  def validate(%Message{data: _, token: _, android: android_message_config} = message) do
+  def validate(%Message{data: _, token: _, android: android_message_config} = message)
+      when android_message_config != nil do
     case AndroidMessageConfig.validate(android_message_config) do
       {:ok, _} ->
         {:ok, message}
@@ -90,7 +92,8 @@ defmodule FirebaseAdminEx.Messaging.Message do
     end
   end
 
-  def validate(%Message{data: _, token: _, apns: apns_message_config} = message) do
+  def validate(%Message{data: _, token: _, apns: apns_message_config} = message)
+      when apns_message_config != nil do
     case APNSMessageConfig.validate(apns_message_config) do
       {:ok, _} ->
         {:ok, message}

@@ -30,13 +30,13 @@ defmodule FirebaseAdminEx.Messaging.AndroidMessage.Config do
   defstruct @keys
 
   # Public API
-  def new(attributes \\ []) do
+  def new(attributes \\ %{}) do
     %__MODULE__{
-      collapse_key: Keyword.get(attributes, :collapse_key),
-      priority: Keyword.get(attributes, :priority),
-      ttl: Keyword.get(attributes, :ttl),
-      restricted_package_name: Keyword.get(attributes, :restricted_package_name),
-      data: Keyword.get(attributes, :data, %{}),
+      collapse_key: Map.get(attributes, :collapse_key),
+      priority: Map.get(attributes, :priority),
+      ttl: Map.get(attributes, :ttl),
+      restricted_package_name: Map.get(attributes, :restricted_package_name),
+      data: Map.get(attributes, :data, %{}),
       notification: Notification.new(attributes)
     }
   end

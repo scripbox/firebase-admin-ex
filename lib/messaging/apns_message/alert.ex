@@ -30,16 +30,16 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Alert do
 
   # Public API
 
-  def new(attributes \\ []) do
+  def new(attributes \\ %{}) do
     %__MODULE__{
-      title: Keyword.get(attributes, :title),
-      body: Keyword.get(attributes, :body),
-      "loc-key": Keyword.get(attributes, :"loc-key"),
-      "loc-args": Keyword.get(attributes, :"loc-args"),
-      "title-loc-key": Keyword.get(attributes, :"title-loc-key"),
-      "title-loc-args": Keyword.get(attributes, :"title-loc-args"),
-      "action-loc-key": Keyword.get(attributes, :"action-loc-key"),
-      "launch-image": Keyword.get(attributes, :"launch-image")
+      title: Map.get(attributes, :title),
+      body: Map.get(attributes, :body),
+      "loc-key": Map.get(attributes, :"loc-key", ""),
+      "loc-args": Map.get(attributes, :"loc-args", []),
+      "title-loc-key": Map.get(attributes, :"title-loc-key", ""),
+      "title-loc-args": Map.get(attributes, :"title-loc-args", []),
+      "action-loc-key": Map.get(attributes, :"action-loc-key"),
+      "launch-image": Map.get(attributes, :"launch-image", "")
     }
   end
 

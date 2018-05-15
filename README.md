@@ -58,6 +58,8 @@ credentials will be available by default.
 
 ### Usage
 
+* Sending a `WebMessage`
+
 ```ex
 # Obtain an access token using goth
 firebase_messaging_scope = "https://www.googleapis.com/auth/firebase.messaging"
@@ -65,20 +67,104 @@ firebase_messaging_scope = "https://www.googleapis.com/auth/firebase.messaging"
 oauth_token = token.token
 
 # Get your device registration token
-registration_token = "c9dWDKIbmB0:APA91bEqhZFLXLMn_r5qAbnExzWbnhXWhKpbRpQeCxvSCJiIpgc9pfUTHKnTjxy6FC20ELwzWsJlcqu98oxhk1UC7m32A4iOx_BsYNWUviI0-iDTVrffj0BvVo79P7HwARW4yqQFxEOT"
+registration_token = "user-device-token"
 
 # Define message payload attributes
-message = FirebaseAdminEx.Messaging.Message.new(
+message = FirebaseAdminEx.Messaging.Message.new(%{
   data: %{},
   token: registration_token,
-  webpush: FirebaseAdminEx.Messaging.WebMessage.Config.new(
+  webpush: FirebaseAdminEx.Messaging.WebMessage.Config.new(%{
     headers: %{},
     data: %{},
     title: "notification title",
     body:  "notification body",
     icon:  "https://icon.png"
-  )
-)
+  })
+})
+
+# Call the Firebase messaging V1 send API
+{:ok, response} = FirebaseAdminEx.Messaging.send(oauth_token, message)
+```
+
+* Sending a `AndroidMessage`
+
+```ex
+# Obtain an access token using goth
+firebase_messaging_scope = "https://www.googleapis.com/auth/firebase.messaging"
+{:ok, token} = Goth.Token.for_scope(firebase_messaging_scope)
+oauth_token = token.token
+
+# Get your device registration token
+registration_token = "user-device-token"
+
+# Define message payload attributes
+message = FirebaseAdminEx.Messaging.Message.new(%{
+  data: %{},
+  token: registration_token,
+  android: FirebaseAdminEx.Messaging.AndroidMessage.Config.new(%{
+    headers: %{},
+    data: %{},
+    title: "notification title",
+    body:  "notification body",
+    icon:  "https://icon.png"
+  })
+})
+
+# Call the Firebase messaging V1 send API
+{:ok, response} = FirebaseAdminEx.Messaging.send(oauth_token, message)
+```
+
+* Sending a `APNSMessage`
+
+```ex
+# Obtain an access token using goth
+firebase_messaging_scope = "https://www.googleapis.com/auth/firebase.messaging"
+{:ok, token} = Goth.Token.for_scope(firebase_messaging_scope)
+oauth_token = token.token
+
+# Get your device registration token
+registration_token = "user-device-token"
+
+# Define message payload attributes
+          Message.new(%{
+            data: %{},
+            token: "registration-token",
+            apns:
+              APNSMessageConfig.new(%{
+                headers: %{},
+                payload: %{
+                  aps:
+                    APNSMessage.Aps.new(%{
+                      alert:
+                        APNSMessage.Alert.new(%{
+                          title: "Message Title",
+                          body: "Message Body"
+                        }),
+                      badge: 5
+                    }),
+                  custom_data: %{}
+                }
+              })
+          })
+
+message = FirebaseAdminEx.Messaging.Message.new(%{
+  data: %{},
+  token: registration_token,
+  apns: FirebaseAdminEx.Messaging.APNSMessage.Config.new(%{
+    headers: %{},
+    payload: %{
+      aps: %{
+        alert: %{
+          title: "Message Title",
+          body: "Message Body"
+        },
+        sound: "default",
+        "content-available": 1
+      },
+      custom_data: %{}
+    }
+  })
+})
 
 # Call the Firebase messaging V1 send API
 {:ok, response} = FirebaseAdminEx.Messaging.send(oauth_token, message)

@@ -9,9 +9,10 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Aps do
   @keys [
     alert_string: "",
     alert: %Alert{},
-    badge: 5,
+    badge: 0,
     sound: "",
-    category: ""
+    category: "",
+    "content-available": 0
   ]
 
   @type t :: %__MODULE__{
@@ -19,20 +20,22 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Aps do
           alert: struct(),
           badge: integer(),
           sound: String.t(),
-          category: String.t()
+          category: String.t(),
+          "content-available": integer()
         }
 
   defstruct @keys
 
   # Public API
 
-  def new(attributes \\ []) do
+  def new(attributes \\ %{}) do
     %__MODULE__{
-      alert_string: Keyword.get(attributes, :alert_string),
-      alert: Alert.new(attributes),
-      badge: Keyword.get(attributes, :badge),
-      sound: Keyword.get(attributes, :sound),
-      category: Keyword.get(attributes, :category)
+      alert_string: Map.get(attributes, :alert_string),
+      alert: Alert.new(Map.get(attributes, :alert)),
+      badge: Map.get(attributes, :badge, 0),
+      sound: Map.get(attributes, :sound),
+      category: Map.get(attributes, :category, ""),
+      "content-available": Map.get(attributes, :"content-available")
     }
   end
 
