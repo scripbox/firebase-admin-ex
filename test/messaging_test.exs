@@ -10,6 +10,8 @@ defmodule FirebaseAdminEx.MessagingTest do
   alias FirebaseAdminEx.Messaging.AndroidMessage.Config, as: AndroidMessageConfig
   alias FirebaseAdminEx.Messaging.APNSMessage.Config, as: APNSMessageConfig
 
+  @project_id "FIREBASE-PROJECT-ID"
+
   defmacro with_request_mock(block) do
     quote do
       with_mock Request,
@@ -38,7 +40,7 @@ defmodule FirebaseAdminEx.MessagingTest do
               })
           })
 
-        {:ok, _response} = Messaging.send(oauth_token, message)
+        {:ok, _response} = Messaging.send(@project_id, oauth_token, message)
       end
     end
 
@@ -60,7 +62,7 @@ defmodule FirebaseAdminEx.MessagingTest do
               })
           })
 
-        {:ok, _response} = Messaging.send(oauth_token, message)
+        {:ok, _response} = Messaging.send(@project_id, oauth_token, message)
       end
     end
 
@@ -89,7 +91,7 @@ defmodule FirebaseAdminEx.MessagingTest do
               })
           })
 
-        {:ok, _response} = Messaging.send(oauth_token, message)
+        {:ok, _response} = Messaging.send(@project_id, oauth_token, message)
       end
     end
 
@@ -106,7 +108,7 @@ defmodule FirebaseAdminEx.MessagingTest do
             token: "registration-token"
           })
 
-        {:ok, _response} = Messaging.send(oauth_token, message)
+        {:ok, _response} = Messaging.send(@project_id, oauth_token, message)
       end
     end
   end

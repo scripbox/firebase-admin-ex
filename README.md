@@ -83,7 +83,8 @@ message = FirebaseAdminEx.Messaging.Message.new(%{
 })
 
 # Call the Firebase messaging V1 send API
-{:ok, response} = FirebaseAdminEx.Messaging.send(oauth_token, message)
+project_id = "YOUR-FIREBASE-PROJECT-ID"
+{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, oauth_token, message)
 ```
 
 * Sending a `AndroidMessage`
@@ -111,7 +112,8 @@ message = FirebaseAdminEx.Messaging.Message.new(%{
 })
 
 # Call the Firebase messaging V1 send API
-{:ok, response} = FirebaseAdminEx.Messaging.send(oauth_token, message)
+project_id = "YOUR-FIREBASE-PROJECT-ID"
+{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, oauth_token, message)
 ```
 
 * Sending a `APNSMessage`
@@ -167,7 +169,8 @@ message = FirebaseAdminEx.Messaging.Message.new(%{
 })
 
 # Call the Firebase messaging V1 send API
-{:ok, response} = FirebaseAdminEx.Messaging.send(oauth_token, message)
+project_id = "YOUR-FIREBASE-PROJECT-ID"
+{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, oauth_token, message)
 ```
 
 ## Firebase Documentation

@@ -11,11 +11,11 @@ defmodule FirebaseAdminEx.Messaging do
   firebase messaging `send` endpoint with the auth token
   and message attributes.
   """
-  @spec send(String.t(), struct()) :: tuple()
-  def send(oauth_token, %Message{} = message) do
+  @spec send(String.t(), String.t(), struct()) :: tuple()
+  def send(project_id, oauth_token, %Message{} = message) do
     with {:ok, message} <- Message.validate(message),
          {:ok, response} <-
-           Request.post(send_url(), %{message: message}, auth_header(oauth_token)),
+           Request.post(send_url(project_id), %{message: message}, auth_header(oauth_token)),
          {:ok, body} <- Response.parse(response) do
       {:ok, body}
     else
@@ -25,12 +25,8 @@ defmodule FirebaseAdminEx.Messaging do
   end
 
   # Private API
-  defp project_id do
-    Application.get_env(:firebase_admin_ex, :project_id)
-  end
-
-  defp send_url do
-    "#{@fcm_endpoint}/projects/#{project_id()}/messages:send"
+  defp send_url(project_id) do
+    "#{@fcm_endpoint}/projects/#{project_id}/messages:send"
   end
 
   defp auth_header(oauth_token) do
