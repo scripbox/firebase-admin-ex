@@ -128,27 +128,6 @@ oauth_token = token.token
 registration_token = "user-device-token"
 
 # Define message payload attributes
-          Message.new(%{
-            data: %{},
-            token: "registration-token",
-            apns:
-              APNSMessageConfig.new(%{
-                headers: %{},
-                payload: %{
-                  aps:
-                    APNSMessage.Aps.new(%{
-                      alert:
-                        APNSMessage.Alert.new(%{
-                          title: "Message Title",
-                          body: "Message Body"
-                        }),
-                      badge: 5
-                    }),
-                  custom_data: %{}
-                }
-              })
-          })
-
 message = FirebaseAdminEx.Messaging.Message.new(%{
   data: %{},
   token: registration_token,
