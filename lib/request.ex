@@ -1,13 +1,11 @@
 defmodule FirebaseAdminEx.Request do
   use HTTPoison.Base
 
-  alias FirebaseAdminEx.Messaging.Message
-
   defp base_headers do
     %{"Content-Type" => "application/json"}
   end
 
-  def process_request_body(%{message: %Message{} = _message} = body) do
+  def process_request_body(body) when is_map(body) do
     body
     |> Poison.encode!()
   end
