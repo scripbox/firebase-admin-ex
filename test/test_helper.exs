@@ -1,6 +1,6 @@
 ExUnit.start()
-{:ok, files} = File.ls("./test/support")
+files = Path.wildcard("./test/support/*.ex")
 
 Enum.each(files, fn file ->
-  Code.require_file("support/#{file}", __DIR__)
+  Code.require_file(file)
 end)
