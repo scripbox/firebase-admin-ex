@@ -19,15 +19,11 @@ defmodule YourApplication.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:firebase_admin_ex, "~> 0.1.0"},
-      {:goth, "~> 0.8.0"}
+      {:firebase_admin_ex, "~> 0.1.0"}
     ]
   end
 end
 ```
-
-> Note the [goth][goth] package, which handles Google Authentication, is also
-> required.
 
 Next, run `mix deps.get` to pull down the dependencies:
 
@@ -46,7 +42,10 @@ your environment has credentials.
 Start by creating a [Service Account key file][service_account_key_file].
 This file can be used to authenticate to Google Cloud Platform services from any environment.
 To use the file, set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to
-the path to the key file.
+the path to the key file. Alternatively you may configure goth (the
+the authentication ssyas described at
+https://github.com/peburrows/goth#installation
+
 For example:
 
 ```sh
@@ -58,14 +57,11 @@ credentials will be available by default.
 
 ### Usage
 
+#### Messaging
+
 * Sending a `WebMessage`
 
 ```ex
-# Obtain an access token using goth
-firebase_messaging_scope = "https://www.googleapis.com/auth/firebase.messaging"
-{:ok, token} = Goth.Token.for_scope(firebase_messaging_scope)
-oauth_token = token.token
-
 # Get your device registration token
 registration_token = "user-device-token"
 
@@ -84,17 +80,12 @@ message = FirebaseAdminEx.Messaging.Message.new(%{
 
 # Call the Firebase messaging V1 send API
 project_id = "YOUR-FIREBASE-PROJECT-ID"
-{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, oauth_token, message)
+{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, message)
 ```
 
 * Sending a `AndroidMessage`
 
 ```ex
-# Obtain an access token using goth
-firebase_messaging_scope = "https://www.googleapis.com/auth/firebase.messaging"
-{:ok, token} = Goth.Token.for_scope(firebase_messaging_scope)
-oauth_token = token.token
-
 # Get your device registration token
 registration_token = "user-device-token"
 
@@ -113,17 +104,12 @@ message = FirebaseAdminEx.Messaging.Message.new(%{
 
 # Call the Firebase messaging V1 send API
 project_id = "YOUR-FIREBASE-PROJECT-ID"
-{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, oauth_token, message)
+{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, message)
 ```
 
 * Sending a `APNSMessage`
 
 ```ex
-# Obtain an access token using goth
-firebase_messaging_scope = "https://www.googleapis.com/auth/firebase.messaging"
-{:ok, token} = Goth.Token.for_scope(firebase_messaging_scope)
-oauth_token = token.token
-
 # Get your device registration token
 registration_token = "user-device-token"
 
@@ -149,7 +135,43 @@ message = FirebaseAdminEx.Messaging.Message.new(%{
 
 # Call the Firebase messaging V1 send API
 project_id = "YOUR-FIREBASE-PROJECT-ID"
-{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, oauth_token, message)
+{:ok, response} = FirebaseAdminEx.Messaging.send(project_id, message)
+```
+
+#### Authentication Management
+
+The `FirebaseAdminEx.Auth` module allows for some limited management of the
+Firebase Autentication system. It currently supports getting and deleting users.
+
+* Getting a user by `uid`:
+
+```ex
+iex(1)> FirebaseAdminEx.Auth.get_user("hYQIfs35Rfa4UMeDaf8lhcmUeTE2")
+{:ok,
+ "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"hYQIfs35Rfa4UMeDaf8lhcmUeTE2\",\n      \"providerUserInfo\": [\n        {\n          \"providerId\": \"phone\",\n          \"rawId\": \"+61400000111\",\n          \"phoneNumber\": \"+61400000111\"\n        }\n      ],\n      \"lastLoginAt\": \"1543976568000\",\n      \"createdAt\": \"1543976568000\",\n      \"phoneNumber\": \"+61400000111\"\n    }\n  ]\n}\n"}
+```
+
+* Getting a user by phone number
+
+```ex
+iex(1)> FirebaseAdminEx.Auth.get_user_by_phone_number("+61400000111")
+{:ok,
+ "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"hYQIfs35Rfa4UMeDaf8lhcmUeTE2\",\n      \"providerUserInfo\": [\n        {\n          \"providerId\": \"phone\",\n          \"rawId\": \"+61400000111\",\n          \"phoneNumber\": \"+61400000111\"\n        }\n      ],\n      \"lastLoginAt\": \"1543976568000\",\n      \"createdAt\": \"1543976568000\",\n      \"phoneNumber\": \"+61400000111\"\n    }\n  ]\n}\n"}
+```
+
+* Getting a user by email address
+
+```ex
+iex(1)> FirebaseAdminEx.Auth.get_user_by_email("user@example.com")
+{:ok,
+ "{\n  \"kind\": \"identitytoolkit#GetAccountInfoResponse\",\n  \"users\": [\n    {\n      \"localId\": \"hYQIfs35Rfa4UMeDaf8lhcmUeTE2\",\n      \"providerUserInfo\": [\n        {\n          \"providerId\": \"phone\",\n          \"rawId\": \"+61400000111\",\n          \"phoneNumber\": \"+61400000111\"\n        \"email\": \"user@example.com\"\n      }\n      ],\n      \"lastLoginAt\": \"1543976568000\",\n      \"createdAt\": \"1543976568000\",\n      \"phoneNumber\": \"+61400000111\"\n    }\n  ]\n}\n"}
+```
+
+* Deleting a user
+
+```ex
+iex(4)> FirebaseAdminEx.Auth.delete_user("hYQIfs35Rfa4UMeDaf8lhcmUeTE2")
+{:ok, "{\n  \"kind\": \"identitytoolkit#DeleteAccountResponse\"\n}\n"}
 ```
 
 ## Firebase Documentation
