@@ -7,29 +7,32 @@ defmodule FirebaseAdminEx.Auth do
   @doc """
   Get a user's info by UID
   """
-  @spec get_user(String.t()) :: tuple()
-  def get_user(uid), do: get_user(:localId, uid)
+  @spec get_user(String.t(), String.t() | nil) :: tuple()
+  def get_user(uid, client_email \\ nil), do: get_user(:localId, uid, client_email)
 
   @doc """
   Get a user's info by phone number
   """
-  @spec get_user_by_phone_number(String.t()) :: tuple()
-  def get_user_by_phone_number(phone_number),
-    do: get_user(:phone_number, phone_number)
+  @spec get_user_by_phone_number(String.t(), String.t() | nil) :: tuple()
+  def get_user_by_phone_number(phone_number, client_email \\ nil),
+    do: get_user(:phone_number, phone_number, client_email)
 
   @doc """
   Get a user's info by email
   """
-  @spec get_user_by_email(String.t()) :: tuple()
-  def get_user_by_email(email), do: get_user(:email, email)
+  @spec get_user_by_email(String.t(), String.t() | nil) :: tuple()
+  def get_user_by_email(email, client_email \\ nil),
+    do: get_user(:email, email, client_email)
 
-  defp get_user(key, value), do: do_request("getAccountInfo", %{key => value})
+  defp get_user(key, value, client_email),
+    do: do_request("getAccountInfo", %{key => value}, client_email)
 
   @doc """
   Delete an existing user by UID
   """
-  @spec delete_user(String.t()) :: tuple()
-  def delete_user(uid), do: do_request("deleteAccount", %{localId: uid})
+  @spec delete_user(String.t(), String.t() | nil) :: tuple()
+  def delete_user(uid, client_email \\ nil),
+    do: do_request("deleteAccount", %{localId: uid}, client_email)
 
   # TODO: Add other commands:
   # list_users
@@ -37,9 +40,14 @@ defmodule FirebaseAdminEx.Auth do
   # update_user
   # import_users
 
-  defp do_request(url_suffix, payload) do
+  defp do_request(url_suffix, payload, client_email) do
     with {:ok, response} <-
-      Request.post(@auth_endpoint <> url_suffix, payload, auth_header()),
+           Request.request(
+             :post,
+             @auth_endpoint <> url_suffix,
+             payload,
+             auth_header(client_email)
+           ),
          {:ok, body} <- Response.parse(response) do
       {:ok, body}
     else
@@ -47,8 +55,19 @@ defmodule FirebaseAdminEx.Auth do
     end
   end
 
-  defp auth_header() do
+  defp auth_header(nil) do
     {:ok, token} = Goth.Token.for_scope(@auth_scope)
-    %{"Authorization" => "Bearer #{token.token}"}
+
+    do_auth_header(token.token)
+  end
+
+  defp auth_header(client_email) do
+    {:ok, token} = Goth.Token.for_scope({client_email, @auth_scope})
+
+    do_auth_header(token.token)
+  end
+
+  defp do_auth_header(token) do
+    %{"Authorization" => "Bearer #{token}"}
   end
 end

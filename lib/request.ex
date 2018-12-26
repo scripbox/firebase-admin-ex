@@ -1,30 +1,28 @@
 defmodule FirebaseAdminEx.Request do
-  use HTTPoison.Base
+  @default_headers %{"Content-Type" => "application/json"}
+  @default_options Application.get_env(:firebase_admin_ex, :default_options)
 
-  defp base_headers do
-    %{"Content-Type" => "application/json"}
+  def request(method, url, data, headers \\ %{}) do
+    method
+    |> HTTPoison.request(
+      url,
+      process_request_body(data),
+      process_request_headers(headers),
+      @default_options
+    )
   end
-
-  def process_request_body(body) when is_map(body) do
-    body
-    |> Poison.encode!()
-  end
-
-  def process_request_body(body), do: body
 
   # Override the base headers with any passed in.
-  def process_request_headers(request_headers) do
-    headers =
-      request_headers
-      |> Enum.into(%{})
-
-    Map.merge(base_headers(), headers)
+  def process_request_headers(headers) when is_map(headers) do
+    Map.merge(@default_headers, headers)
     |> Enum.into([])
   end
 
-  # :timeout - timeout to establish a connection, in milliseconds.
-  # :recv_timeout - timeout used when receiving a connection.
-  def process_request_options(_options) do
-    [timeout: 5000, recv_timeout: 2000]
+  def process_request_headers(_), do: @default_headers
+
+  defp process_request_body(body) when is_map(body) do
+    Jason.encode!(body)
   end
+
+  defp process_request_body(body), do: body
 end

@@ -24,6 +24,7 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Aps do
           "content-available": integer()
         }
 
+  @derive Jason.Encoder
   defstruct @keys
 
   # Public API

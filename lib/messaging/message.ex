@@ -27,6 +27,7 @@ defmodule FirebaseAdminEx.Messaging.Message do
           token: String.t()
         }
 
+  @derive Jason.Encoder
   defstruct @keys
 
   # Public API

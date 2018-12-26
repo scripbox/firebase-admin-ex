@@ -1,6 +1,6 @@
 defmodule FirebaseAdminEx.RequestMock do
   # Public API
-  def post(_url, %{message: _message}, _auth_header) do
+  def post(_url, %{message: _message}, _headers) do
     {:ok, successful_response()}
   end
 
@@ -25,7 +25,8 @@ defmodule FirebaseAdminEx.RequestMock do
         {"Vary", "Origin,Accept-Encoding"},
         {"Transfer-Encoding", "chunked"}
       ],
-      request_url: "https://fcm.googleapis.com/v1/projects/YOUR-FIREBASE-PROJECT-ID/messages:send",
+      request_url:
+        "https://fcm.googleapis.com/v1/projects/YOUR-FIREBASE-PROJECT-ID/messages:send",
       status_code: 200
     }
   end

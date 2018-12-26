@@ -26,6 +26,7 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Alert do
           "launch-image": String.t()
         }
 
+  @derive Jason.Encoder
   defstruct @keys
 
   # Public API

@@ -32,6 +32,7 @@ defmodule FirebaseAdminEx.Messaging.AndroidMessage.Notification do
           title_loc_args: List.t()
         }
 
+  @derive Jason.Encoder
   defstruct @keys
 
   # Public API

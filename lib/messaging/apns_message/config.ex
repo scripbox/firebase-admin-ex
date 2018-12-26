@@ -19,6 +19,7 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Config do
           payload: struct()
         }
 
+  @derive Jason.Encoder
   defstruct @keys
 
   # Public API
