@@ -27,6 +27,7 @@ defmodule FirebaseAdminEx.Messaging.AndroidMessage.Config do
           notification: struct()
         }
 
+  @derive Jason.Encoder
   defstruct @keys
 
   # Public API

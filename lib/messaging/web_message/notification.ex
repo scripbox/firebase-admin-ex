@@ -16,6 +16,7 @@ defmodule FirebaseAdminEx.Messaging.WebMessage.Notification do
           icon: String.t()
         }
 
+  @derive Jason.Encoder
   defstruct @keys
 
   # Public API

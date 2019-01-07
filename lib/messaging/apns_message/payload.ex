@@ -16,6 +16,7 @@ defmodule FirebaseAdminEx.Messaging.APNSMessage.Payload do
           custom_data: map()
         }
 
+  @derive Jason.Encoder
   defstruct @keys
 
   # Public API

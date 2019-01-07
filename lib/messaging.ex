@@ -13,8 +13,10 @@ defmodule FirebaseAdminEx.Messaging do
   and message attributes.
   """
   @spec send(String.t(), struct()) :: tuple()
-  def send(project_id, message) do
-    {:ok, token} = Goth.Token.for_scope(@messaging_scope)
+  def send(client_email, message) do
+    {:ok, project_id} = Goth.Config.get(client_email, :project_id)
+    {:ok, token} = Goth.Token.for_scope({client_email, @messaging_scope})
+
     send(project_id, token.token, message)
   end
 
@@ -26,7 +28,12 @@ defmodule FirebaseAdminEx.Messaging do
   def send(project_id, oauth_token, %Message{} = message) do
     with {:ok, message} <- Message.validate(message),
          {:ok, response} <-
-           Request.post(send_url(project_id), %{message: message}, auth_header(oauth_token)),
+           Request.request(
+             :post,
+             send_url(project_id),
+             %{message: message},
+             auth_header(oauth_token)
+           ),
          {:ok, body} <- Response.parse(response) do
       {:ok, body}
     else
@@ -43,5 +50,4 @@ defmodule FirebaseAdminEx.Messaging do
   defp auth_header(oauth_token) do
     %{"Authorization" => "Bearer #{oauth_token}"}
   end
-
 end

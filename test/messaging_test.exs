@@ -15,7 +15,7 @@ defmodule FirebaseAdminEx.MessagingTest do
   defmacro with_request_mock(block) do
     quote do
       with_mock Request,
-        post: fn url, body, auth_header -> RequestMock.post(url, body, auth_header) end do
+        request: fn method, url, body, headers -> RequestMock.post(url, body, headers) end do
         unquote(block)
       end
     end

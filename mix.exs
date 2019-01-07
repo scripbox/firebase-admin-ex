@@ -22,9 +22,9 @@ defmodule FirebaseAdminEx.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.4", override: true},
-      {:poison, "~> 3.1.0"},
+      {:jason, "~> 1.1.0"},
       {:mock, "~> 0.3.0", only: :test},
-      {:goth, "~> 0.8.0"}
+      {:goth, "~> 0.11.0"}
     ]
   end
 end

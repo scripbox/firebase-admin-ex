@@ -5,7 +5,7 @@ defmodule FirebaseAdminEx.Response do
         {:ok, body}
 
       %HTTPoison.Response{status_code: status_code, body: body} ->
-        error_message = Poison.decode!(body) |> Map.get("error", %{}) |> Map.get("message")
+        error_message = Jason.decode!(body) |> Map.get("error", %{}) |> Map.get("message")
         {:error, "#{status_code} - #{error_message}"}
     end
   end
