@@ -42,8 +42,9 @@ defmodule FirebaseAdminEx.DynamicLink do
              payload,
              auth_header(client_email)
            ),
-         {:ok, body} <- Response.parse(response) do
-      {:ok, body}
+         {:ok, body} <- Response.parse(response),
+         {:ok, result} <- Jason.decode(body) do
+      {:ok, result}
     else
       {:error, error} -> raise Errors.ApiError, Kernel.inspect(error)
     end
