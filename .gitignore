@@ -9,6 +9,7 @@
 /*.ez
 /log
 /cover
+doc/
 
 # Generated on crash by the VM
 erl_crash.dump
