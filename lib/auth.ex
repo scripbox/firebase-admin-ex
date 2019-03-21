@@ -40,6 +40,13 @@ defmodule FirebaseAdminEx.Auth do
   # update_user
   # import_users
 
+  @doc """
+  Create an email/password user
+  """
+  @spec create_email_password_user(map, String.t() | nil) :: tuple()
+  def create_email_password_user(%{"email" => email, "password" => password}, client_email \\ nil),
+    do: do_request("signupNewUser", %{:email => uid, :password => password, :returnSecureToken => true}, client_email)
+
   defp do_request(url_suffix, payload, client_email) do
     with {:ok, response} <-
            Request.request(
