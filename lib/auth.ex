@@ -78,7 +78,7 @@ defmodule FirebaseAdminEx.Auth do
         |> Map.take(@valids_action_code_settings)
         |> Map.merge(initial_settings, fn _k, _v1, v2 -> v2 end)
       else
-        initial_settings
+        _ -> initial_settings
       end
     do_request("accounts:sendOobCode", payload, client_email, project_id, :accounts)
   end
