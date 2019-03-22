@@ -17,7 +17,7 @@ defmodule FirebaseAdminEx.Auth do
     "androidInstallApp",
     "iOSBundleId"
   ]
-  
+
   @doc """
   Get a user's info by UID
   """
@@ -58,9 +58,16 @@ defmodule FirebaseAdminEx.Auth do
   Create an email/password user
   """
   @spec create_email_password_user(map, String.t() | nil) :: tuple()
-  def create_email_password_user(%{"email" => email, "password" => password}, client_email \\ nil),
-    do: do_request("signupNewUser", %{:email => email, :password => password, :returnSecureToken => true}, client_email)
-
+  def create_email_password_user(
+        %{"email" => email, "password" => password},
+        client_email \\ nil
+      ),
+      do:
+        do_request(
+          "signupNewUser",
+          %{:email => email, :password => password, :returnSecureToken => true},
+          client_email
+        )
 
   @doc """
   Generates the email action link for sign-in flows, using the action code settings provided
@@ -72,7 +79,8 @@ defmodule FirebaseAdminEx.Auth do
       "email" => email,
       "returnOobLink" => true
     }
-    #payload = 
+
+    # payload = 
     # case action_code_settings do
     #    nil -> initial_settings
     #    initial_settings when is_map(initial_settings) -> 
@@ -80,10 +88,10 @@ defmodule FirebaseAdminEx.Auth do
     #      |> Map.take(@valids_action_code_settings)
     #      |> Map.merge(initial_settings, fn _k, _v1, v2 -> v2 end)
     #  end
-    
+
     do_request("accounts:sendOobCode", initial_settings, client_email, project_id, :accounts)
   end
-   
+
   defp do_request(url_suffix, payload, client_email, project_id, :accounts) do
     with {:ok, response} <-
            Request.request(
