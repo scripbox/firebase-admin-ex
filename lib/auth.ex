@@ -65,7 +65,7 @@ defmodule FirebaseAdminEx.Auth do
   @doc """
   Generates the email action link for sign-in flows, using the action code settings provided
   """
-  @spec generate_sign_in_with_email_link(String.t() ,map, String.t() | nil, String.t()) :: tuple()
+  @spec generate_sign_in_with_email_link(String.t() ,map | nil, String.t() | nil, String.t()) :: tuple()
   def generate_sign_in_with_email_link(email, action_code_settings, client_email, project_id) do
     initial_settings = %{
       "requestType" => "EMAIL_SIGNIN",
