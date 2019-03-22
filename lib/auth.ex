@@ -73,12 +73,12 @@ defmodule FirebaseAdminEx.Auth do
       "returnOobLink" => true
     }
     payload = 
-      unless action_code_settings == nil do
+      if is_nil(action_code_settings) do
+        initial_settings
+      else
         action_code_settings
         |> Map.take(@valids_action_code_settings)
         |> Map.merge(initial_settings, fn _k, _v1, v2 -> v2 end)
-      else
-        initial_settings
       end
     do_request("accounts:sendOobCode", payload, client_email, project_id, :accounts)
   end
