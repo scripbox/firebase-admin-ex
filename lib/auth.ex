@@ -80,16 +80,16 @@ defmodule FirebaseAdminEx.Auth do
       "returnOobLink" => true
     }
 
-    # payload = 
-    # case action_code_settings do
-    #    nil -> initial_settings
-    #    initial_settings when is_map(initial_settings) -> 
-    #      action_code_settings
-    #      |> Map.take(@valids_action_code_settings)
-    #      |> Map.merge(initial_settings, fn _k, _v1, v2 -> v2 end)
-    #  end
+    payload = 
+      case action_code_settings do
+        nil -> initial_settings
+        action_code_settings when is_map(action_code_settings) -> 
+          action_code_settings
+          |> Map.take(@valids_action_code_settings)
+          |> Map.merge(initial_settings, fn _k, _v1, v2 -> v2 end)
+      end
 
-    do_request("accounts:sendOobCode", initial_settings, client_email, project_id, :accounts)
+    do_request("accounts:sendOobCode", payload, client_email, project_id, :accounts)
   end
 
   defp do_request(url_suffix, payload, client_email, project_id, :accounts) do
