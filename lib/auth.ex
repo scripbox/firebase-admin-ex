@@ -2,7 +2,7 @@ defmodule FirebaseAdminEx.Auth do
   alias FirebaseAdminEx.{Request, Response, Errors}
 
   @auth_endpoint "https://www.googleapis.com/identitytoolkit/v3/relyingparty/"
-  @auth_endpoint_email "https://identitytoolkit.googleapis.com/v1/projects/"
+  @auth_endpoint_account "https://identitytoolkit.googleapis.com/v1/projects/"
   @auth_scope "https://www.googleapis.com/auth/cloud-platform"
 
   @valids_action_code_settings [
@@ -89,14 +89,14 @@ defmodule FirebaseAdminEx.Auth do
           |> Map.merge(initial_settings, fn _k, _v1, v2 -> v2 end)
       end
 
-    do_request("accounts:sendOobCode", payload, client_email, project_id, :accounts)
+    do_request("accounts:sendOobCode", payload, client_email, project_id)
   end
 
-  defp do_request(url_suffix, payload, client_email, project_id, :accounts) do
+  defp do_request(url_suffix, payload, client_email, project_id) do
     with {:ok, response} <-
            Request.request(
              :post,
-             "#{@auth_endpoint_email}#{project_id}/#{url_suffix}",
+             "#{@auth_endpoint_account}#{project_id}/#{url_suffix}",
              payload,
              auth_header(client_email)
            ),
