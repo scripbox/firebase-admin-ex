@@ -141,7 +141,7 @@ project_id = "YOUR-FIREBASE-PROJECT-ID"
 #### Authentication Management
 
 The `FirebaseAdminEx.Auth` module allows for some limited management of the
-Firebase Autentication system. It currently supports getting and deleting users.
+Firebase Autentication system. It currently supports getting, deleting and creating users.
 
 * Getting a user by `uid`:
 
@@ -172,6 +172,40 @@ iex(1)> FirebaseAdminEx.Auth.get_user_by_email("user@example.com")
 ```ex
 iex(4)> FirebaseAdminEx.Auth.delete_user("hYQIfs35Rfa4UMeDaf8lhcmUeTE2")
 {:ok, "{\n  \"kind\": \"identitytoolkit#DeleteAccountResponse\"\n}\n"}
+```
+
+* Creating a user
+
+```ex
+iex(4)> FirebaseAdminEx.Auth.create_email_password_user(%{"email" => "user@email.com", "password" => "hYQIfs35Rfa4UMeDaf8lhcmUeTE2"})
+{:ok,
+ "{\n  \"kind\": \"identitytoolkit#SignupNewUserResponse\",\n  \"email\": \"user@email.com\",\n  \"localId\": \"s5dggHJyr3fgdgJkLe234G6h6y\"\n}\n"}
+```
+
+* Generating the email action link for sign-in flows
+
+```ex
+# Define ActionCodeSettings
+action_code_settings = 
+  FirebaseAdminEx.Auth.ActionCodeSettings.new(
+    %{
+      requestType: "EMAIL_SIGNIN",
+      email: "user@email.com",
+      returnOobLink: true,
+      continueUrl: "www.test.com/sign-in",
+      canHandleCodeInApp: false,
+      dynamicLinkDomain: "",
+      androidPackageName: "",
+      androidMinimumVersion: "",
+      androidInstallApp: false,
+      iOSBundleId: ""
+    }
+  )
+client_email = "YOUR-FIREBASE-CLIENT-EMAIL"
+project_id = "YOUR-FIREBASE-PROJECT-ID"
+iex(4)> FirebaseAdminEx.Auth.generate_sign_in_with_email_link(action_code_settings, client_email, project_id)
+{:ok,
+ "{\n  \"kind\": \"identitytoolkit#GetOobConfirmationCodeResponse\",\n  \"email\": \"user@email.com\",\n  \"oobLink\": \"https://YOUR-FIREBASE-CLIENT.firebaseapp.com/__/auth/action?mode=signIn&oobCode=xcdwelFRvfbtghHjswvw2f3g46hh6j8&apiKey=Fgae35h6j78_vbsddgs34th6h6hhekj97gfj&lang=en&continueUrl=www.test.com/sign-in\"\n}\n"}
 ```
 
 ## Firebase Documentation

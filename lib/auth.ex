@@ -1,22 +1,10 @@
 defmodule FirebaseAdminEx.Auth do
   alias FirebaseAdminEx.{Request, Response, Errors}
+  alias FirebaseAdminEx.Auth.ActionCodeSettings
 
   @auth_endpoint "https://www.googleapis.com/identitytoolkit/v3/relyingparty/"
   @auth_endpoint_account "https://identitytoolkit.googleapis.com/v1/projects/"
   @auth_scope "https://www.googleapis.com/auth/cloud-platform"
-
-  @valids_action_code_settings [
-    "requestType",
-    "email",
-    "returnOobLink",
-    "continueUrl",
-    "canHandleCodeInApp",
-    "dynamicLinkDomain",
-    "androidPackageName",
-    "androidMinimumVersion",
-    "androidInstallApp",
-    "iOSBundleId"
-  ]
 
   @doc """
   Get a user's info by UID
@@ -72,24 +60,11 @@ defmodule FirebaseAdminEx.Auth do
   @doc """
   Generates the email action link for sign-in flows, using the action code settings provided
   """
-  @spec generate_sign_in_with_email_link(String.t(), map, String.t(), String.t()) :: tuple()
-  def generate_sign_in_with_email_link(email, action_code_settings, client_email, project_id) do
-    initial_settings = %{
-      "requestType" => "EMAIL_SIGNIN",
-      "email" => email,
-      "returnOobLink" => true
-    }
-
-    payload = 
-      case action_code_settings do
-        nil -> initial_settings
-        action_code_settings when is_map(action_code_settings) -> 
-          action_code_settings
-          |> Map.take(@valids_action_code_settings)
-          |> Map.merge(initial_settings, fn _k, _v1, v2 -> v2 end)
-      end
-
-    do_request("accounts:sendOobCode", payload, client_email, project_id)
+  @spec generate_sign_in_with_email_link(ActionCodeSettings.t(), String.t(), String.t()) :: tuple()
+  def generate_sign_in_with_email_link(action_code_settings, client_email, project_id) do
+    with {:ok, action_code_settings} <- ActionCodeSettings.validate(action_code_settings) do
+      do_request("accounts:sendOobCode", action_code_settings, client_email, project_id)
+    end
   end
 
   defp do_request(url_suffix, payload, client_email, project_id) do
