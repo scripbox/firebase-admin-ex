@@ -13,8 +13,22 @@ defmodule FirebaseAdminExTest do
 
   defmacro with_request_mock(block) do
     quote do
-      with_mock Request,
-        request: fn method, url, body, headers -> RequestMock.post(url, body, headers) end do
+      with_mock ([
+        {
+          Request,
+          [],
+          [
+            request: fn method, url, body, headers -> RequestMock.post(url, body, headers) end
+          ]
+        },
+        {
+          Goth.Token,
+          [],
+          [
+            for_scope: fn _auth_scope -> {:ok, %{token: "token_test"}} end
+          ]
+        }
+      ]) do
         unquote(block)
       end
     end
