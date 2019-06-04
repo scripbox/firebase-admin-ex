@@ -1,5 +1,7 @@
 # Firebase Admin Elixir SDK
 
+[![Build Status](https://travis-ci.org/scripbox/firebase-admin-ex.svg?branch=master)](https://travis-ci.org/scripbox/firebase-admin-ex)
+
 ## Overview
 
 The Firebase Admin Elixir SDK enables access to Firebase services from privileged environments
