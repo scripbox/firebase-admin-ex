@@ -13,7 +13,7 @@ defmodule FirebaseAdminExTest do
 
   defmacro with_request_mock(block) do
     quote do
-      with_mock ([
+      with_mocks([
         {
           Request,
           [],
