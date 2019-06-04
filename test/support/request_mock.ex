@@ -1,6 +1,6 @@
 defmodule FirebaseAdminEx.RequestMock do
   # Public API
-  def post(_url, %{message: _message}, _headers) do
+  def post(_url, _body, _headers) do
     {:ok, successful_response()}
   end
 
