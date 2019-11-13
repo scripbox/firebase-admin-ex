@@ -4,7 +4,7 @@ defmodule FirebaseAdminEx.MixProject do
   def project do
     [
       app: :firebase_admin_ex,
-      version: "0.1.0",
+      version: "0.2.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -25,11 +25,11 @@ defmodule FirebaseAdminEx.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:httpoison, "~> 1.4"},
-      {:jason, "~> 1.1.0"},
-      {:mock, "~> 0.3.0", only: :test},
-      {:goth, "~> 0.11.0"},
-      {:ex_doc, "~> 0.18.0", only: :dev, runtime: false}
+      {:httpoison, "~> 1.5"},
+      {:jason, "~> 1.1"},
+      {:mock, "~> 0.3.3", only: :test},
+      {:goth, "~> 1.1"},
+      {:ex_doc, "~> 0.21.2", only: :dev, runtime: false}
     ]
   end
 
