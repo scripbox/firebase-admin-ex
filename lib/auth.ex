@@ -37,6 +37,20 @@ defmodule FirebaseAdminEx.Auth do
   def delete_user(uid, client_email \\ nil),
     do: do_request("deleteAccount", %{localId: uid}, client_email)
 
+  @doc """
+  Update an existing user by UID
+  Pick one or more fields that require updation. 
+  Passing the firebase UID as local_id is mandatory, force check this in the client before using update_user api.
+  iex(9)> request_body =  %{email_verified: true, local_id: "iD1vovu1QsOcOFrkB2XBw2F4jsZ2"}
+        %{email_verified: true, local_id: "iD1vovu1QsOcOFrkB2XBw2F4jsZ2"}
+  iex(10)> FirebaseAdminEx.Auth.update_user(request_body)
+        {:ok, _UPDATED_USER_BODY_RESPONSE}
+
+  """
+  @spec update_user(map, String.t() | nil) :: tuple()
+  def update_user(request_body, client_email \\ nil),
+    do: do_request("setAccountInfo", request_body, client_email)
+
   # TODO: Add other commands:
   # list_users
   # create_user

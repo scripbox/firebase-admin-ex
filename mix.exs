@@ -4,7 +4,7 @@ defmodule FirebaseAdminEx.MixProject do
   def project do
     [
       app: :firebase_admin_ex,
-      version: "0.2.1",
+      version: "0.2.2",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
