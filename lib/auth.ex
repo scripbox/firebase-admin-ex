@@ -117,6 +117,7 @@ defmodule FirebaseAdminEx.Auth do
           certs = Poison.Parser.parse!(body, %{}),
           {:ok, header} <- Joken.peek_header(id_token),
           jwks = JOSE.JWK.from_firebase(certs),
+          true <- !is_nil(jwks[header["kid"]]),
           jwk = jwks[header["kid"]] |> JOSE.JWK.to_map |> elem(1),
           {true, jose_jwt, _} = JOSE.JWT.verify(jwk, id_token) do
           fields = JOSE.JWT.to_map(jose_jwt) |> elem(1)
