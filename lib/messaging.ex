@@ -13,9 +13,8 @@ defmodule FirebaseAdminEx.Messaging do
   and message attributes.
   """
   @spec send(String.t(), struct()) :: tuple()
-  def send(client_email, message) do
-    {:ok, project_id} = Goth.Config.get(client_email, :project_id)
-    {:ok, token} = Goth.Token.for_scope({client_email, @messaging_scope})
+  def send(project_id, message) do
+    {:ok, token} = Goth.Token.for_scope(@messaging_scope)
 
     send(project_id, token.token, message)
   end
