@@ -4,8 +4,8 @@ defmodule FirebaseAdminEx.MixProject do
   def project do
     [
       app: :firebase_admin_ex,
-      version: "0.2.0",
-      elixir: "~> 1.6",
+      version: "0.3.0",
+      elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: description(),
@@ -28,7 +28,7 @@ defmodule FirebaseAdminEx.MixProject do
       {:httpoison, "~> 1.5"},
       {:jason, "~> 1.1"},
       {:mock, "~> 0.3.3", only: :test},
-      {:goth, "~> 1.1"},
+      {:goth, "~> 1.2"},
       {:ex_doc, "~> 0.21.2", only: :dev, runtime: false}
     ]
   end
@@ -40,7 +40,7 @@ defmodule FirebaseAdminEx.MixProject do
   defp package do
     [
       licenses: ["Apache 2.0"],
-      links: %{"GitHub" => "https://github.com/scripbox/firebase-admin-ex"}
+      links: %{"GitHub" => "https://github.com/headwayio/firebase-admin-ex"}
     ]
   end
 end

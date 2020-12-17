@@ -14,7 +14,7 @@ defmodule FirebaseAdminEx.Messaging do
   """
   @spec send(String.t(), struct()) :: tuple()
   def send(project_id, message) do
-    {:ok, token} = Goth.Token.for_scope(@messaging_scope)
+    {:ok, token} = Goth.Token.for_scope(@messaging_scope) |> IO.inspect()
 
     send(project_id, token.token, message)
   end
@@ -33,7 +33,7 @@ defmodule FirebaseAdminEx.Messaging do
              %{message: message},
              auth_header(oauth_token)
            ),
-         {:ok, body} <- Response.parse(response) do
+         {:ok, body} <- Response.parse(response) |> IO.inspect() do
       {:ok, body}
     else
       {:error, error} ->
