@@ -29,6 +29,7 @@ defmodule FirebaseAdminEx.MixProject do
       {:jason, "~> 1.1"},
       {:mock, "~> 0.3.3", only: :test},
       {:goth, "~> 1.2"},
+      {:poison, "~> 4.0.1"},
       {:ex_doc, "~> 0.21.2", only: :dev, runtime: false}
     ]
   end
